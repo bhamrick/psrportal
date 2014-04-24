@@ -1,6 +1,7 @@
 <?php
 if(strpos($_SERVER['REQUEST_URI'],'/index.php/') !== false) {
     header('Location: http://wiki.pokemonspeedruns.com'.$_SERVER['REQUEST_URI'],true,302);
+    exit();
 }
 ?>
 <html>
