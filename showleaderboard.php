@@ -1,3 +1,6 @@
+<?php
+header("Location: http://wiki.pokemonspeedruns.com/index.php/World_Records");
+?>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
