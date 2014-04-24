@@ -1,5 +1,6 @@
 <?php
 header("Location: http://wiki.pokemonspeedruns.com/index.php/World_Records");
+exit();
 ?>
 <html>
 <head>
