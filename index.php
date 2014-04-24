@@ -1,3 +1,8 @@
+<?php
+if(strpos($_SERVER['REQUEST_URI'],'/index.php/') !== false) {
+    header('Location: http://wiki.pokemonspeedruns.com'.$_SERVER['REQUEST_URI'],true,302);
+}
+?>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
