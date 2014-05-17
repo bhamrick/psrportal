@@ -1,9 +1,6 @@
-<?php
-header("Location: http://wiki.pokemonspeedruns.com/index.php/World_Records");
-exit();
-?>
 <html>
 <head>
+    <title>Pok&eacute;mon Speedruns - Leaderboards</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<style>
 		body

@@ -1,10 +1,179 @@
 <?php
-header("Location: http://wiki.pokemonspeedruns.com/index.php/World_Records");
-exit();
+$titles = array(
+    "redblue" => "Pokémon Red/Blue",
+    "yellow" => "Pokémon Yellow",
+    "stadium" => "Pokémon Stadium",
+    "snap" => "Pokémon Snap",
+    "tcg" => "Pokémon Trading Card Game",
+    "goldsilver" => "Pokémon Gold/Silver",
+    "crystal" => "Pokémon Crystal",
+    "stadium2" => "Pokémon Stadium 2",
+    "rubysapphire" => "Pokémon Ruby/Sapphire",
+    "emerald" => "Pokémon Emerald",
+    "frlg" => "Pokémon FireRed/LeafGreen",
+    "mysteryrb" => "Pokémon Mystery Dungeon: Blue/Red Rescue Team",
+    "colosseum" => "Pokémon Colosseum",
+    "xd" => "Pokémon XD: Gale of Darkness",
+    "diamondpearl" => "Pokémon Diamond/Pearl",
+    "platinum" => "Pokémon Platinum",
+    "hgss" => "Pokémon HeartGold/SoulSilver",
+    "pokepark" => "Poképark Wii: Pikachu's Adventure",
+    "rumble" => "Pokémon Rumble",
+    "blackwhite" => "Pokémon Black/White",
+    "pokepark2" => "Poképark 2: Wonders Beyond",
+    "black2white2" => "Pokémon Black2/White2",
+    "conquest" => "Pokémon Conquest",
+    "xy" => "Pokémon X/Y",
+);
+
+$urls = array(
+    "redblue" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Red/Blue/Times",
+    "yellow" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Yellow/Times",
+    "stadium" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Stadium/Times",
+    "snap" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Snap/Times",
+    "tcg" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Trading_Card_Game/Times",
+    "goldsilver" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Gold/Silver/Times",
+    "crystal" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Crystal/Times",
+    "stadium2" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Stadium_2/Times",
+    "rubysapphire" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Ruby/Sapphire/Times",
+    "emerald" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Emerald/Times",
+    "frlg" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_FireRed/LeafGreen/Times",
+    "mysteryrb" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Mystery_Dungeon:_Blue/Red_Rescue_Team/Times",
+    "colosseum" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Colosseum/Times",
+    "xd" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_XD:_Gale_of_Darkness/Times",
+    "diamondpearl" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Diamond/Pearl/Times",
+    "platinum" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Platinum/Times",
+    "hgss" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_HeartGold/SoulSilver/Times",
+    "pokepark" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9park_Wii:_Pikachu%27s_Adventure/Times",
+    "rumble" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Rumble/Times",
+    "blackwhite" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Black/White/Times",
+    "pokepark2" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9park_2:_Wonders_Beyond/Times",
+    "black2white2" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Black2/White2/Times",
+    "conquest" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Conquest/Times",
+    "xy" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_X/Y/Times",
+);
+
+function make_headers($content) {
+    global $titles, $urls;
+    $headers = <<<EOF
+    <div id="dropdown">
+	<table style="width: 100%">
+	<tr>
+	<td style="width: 33%">
+	<select id="category">
+EOF;
+
+	if (preg_match_all('/<span\sclass="mw-headline".*?>\s(.*?)\s<\/span>/', $content, $matches))
+	{
+		foreach ($matches[1] as $match)
+		{
+			$headers .= '<option>' . $match . '</option>';
+		}
+	}
+	$headers .= <<<EOF
+    </select>
+    </td>
+	<td style="width: 33%; text-align: center">
+EOF;
+    
+	$headers .= '<b>' . $titles[$_GET["game"]] . '</b>';
+    $headers .= <<<EOF
+	</td>
+	<td style="width: 33%; text-align: right">
+EOF;
+	$headers .= '<a href="' . $urls[$_GET["game"]] . '">Submit a time</a>';
+    $headers .= <<<EOF
+	</td>
+	</tr>
+	</table>
+    </div>
+EOF;
+    return $headers;
+}
+
+function make_boards($content)
+{
+    global $times, $urls;
+    $boards = '';
+	if (preg_match_all('/<table.*?>.*?<\/[\s]*table>/s', $content, $matches))
+	{
+		$i = 0;
+		foreach ($matches[0] as $match)
+		{
+			$boards .= '<div id="board' . $i . '" class="content">' . $match . '</div>';
+			$i++;
+		}
+	}
+    return $boards;
+}
+
+$cacheTime = 5 * 60;
+/*
+Table creation query:
+
+CREATE TABLE leaderboard_cache
+(
+  game character varying(255) NOT NULL,
+  lastupdated integer NOT NULL,
+  cacheheader text NOT NULL,
+  cacheboards text NOT NULL,
+  CONSTRAINT leaderboard_cache_pkey PRIMARY KEY (game)
+);
+*/
+
+$db = pg_connect("");
+if (!$db)
+{
+    // Connection Error
+    $headers = '';
+    $boards = '<div><b>Failed to load leaderboards.</b></div>';
+}
+else if (array_key_exists("game", $_GET) && array_key_exists($_GET["game"], $titles))
+{
+    if($result = pg_query_params($db, 'SELECT lastUpdated, cacheHeader, cacheBoards FROM leaderboard_cache WHERE game=$1', array($_GET["game"])))
+    {
+        if(($row = pg_fetch_row($result)) && $row[0] >= time() - $cacheTime)
+        {
+            $headers = $row[1];
+            $boards = $row[2];
+        }
+        else
+        {
+            $content = file_get_contents($urls[$_GET["game"]]);
+            if(!$content)
+            {
+                $headers = '';
+                $boards = '<div><b>Failed to load leaderboards.</b></div>';
+            }
+            else
+            {
+                $headers = make_headers($content);
+                $boards = make_boards($content);
+                if($row)
+                {
+                    pg_query_params($db, 'UPDATE leaderboard_cache SET lastUpdated=$2,cacheHeader=$3,cacheBoards=$4 WHERE game=$1', array($_GET["game"], time(), $headers, $boards));
+                }
+                else
+                {
+                    pg_query_params($db, 'INSERT INTO leaderboard_cache (game, lastUpdated, cacheHeader, cacheBoards) VALUES ($1, $2, $3, $4)', array($_GET["game"], time(), $headers, $boards));
+                }
+            }
+        }
+    }
+}
+else
+{
+    // Invalid Request
+    $headers = '';
+    $boards = '<div><b>No valid leaderboard specified.</b></div>';
+}
+
+
 ?>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Pok&eacute;mon Speedruns - Viewing a Leaderboard</title>
 	<style>
 		body
 		{
@@ -191,93 +360,9 @@ exit();
 			<a href="http://www.pokemonspeedruns.com/index.php/FAQ_List" class="navbutton">FAQs</a>
 			<a href="http://twitch.tv/team/psr" class="navbutton">Twitch</a>
 		</div>
-		<div id="dropdown">
-			<table style="width: 100%">
-				<tr>
-					<td style="width: 33%">
-						<select id="category">';
-						<!-- My php is 2 pro -->
-						<?php
-							$titles = array(
-								"redblue" => "Pokémon Red/Blue",
-								"yellow" => "Pokémon Yellow",
-								"stadium" => "Pokémon Stadium",
-								"snap" => "Pokémon Snap",
-								"tcg" => "Pokémon Trading Card Game",
-								"goldsilver" => "Pokémon Gold/Silver",
-								"crystal" => "Pokémon Crystal",
-								"stadium2" => "Pokémon Stadium 2",
-								"rubysapphire" => "Pokémon Ruby/Sapphire",
-								"emerald" => "Pokémon Emerald",
-								"frlg" => "Pokémon FireRed/LeafGreen",
-								"mysteryrb" => "Pokémon Mystery Dungeon: Blue/Red Rescue Team",
-								"colosseum" => "Pokémon Colosseum",
-								"xd" => "Pokémon XD: Gale of Darkness",
-								"diamondpearl" => "Pokémon Diamond/Pearl",
-								"platinum" => "Pokémon Platinum",
-								"hgss" => "Pokémon HeartGold/SoulSilver",
-								"pokepark" => "Poképark Wii: Pikachu's Adventure",
-								"rumble" => "Pokémon Rumble",
-								"blackwhite" => "Pokémon Black/White",
-								"pokepark2" => "Poképark 2: Wonders Beyond",
-								"black2white2" => "Pokémon Black2/White2",
-								"conquest" => "Pokémon Conquest",
-								"xy" => "Pokémon X/Y",
-							);
-							
-							$urls = array(
-								"redblue" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Red/Blue/Times",
-								"yellow" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Yellow/Times",
-								"stadium" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Stadium/Times",
-								"snap" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Snap/Times",
-								"tcg" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Trading_Card_Game/Times",
-								"goldsilver" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Gold/Silver/Times",
-								"crystal" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Crystal/Times",
-								"stadium2" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Stadium_2/Times",
-								"rubysapphire" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Ruby/Sapphire/Times",
-								"emerald" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Emerald/Times",
-								"frlg" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_FireRed/LeafGreen/Times",
-								"mysteryrb" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Mystery_Dungeon:_Blue/Red_Rescue_Team/Times",
-								"colosseum" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Colosseum/Times",
-								"xd" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_XD:_Gale_of_Darkness/Times",
-								"diamondpearl" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Diamond/Pearl/Times",
-								"platinum" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Platinum/Times",
-								"hgss" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_HeartGold/SoulSilver/Times",
-								"pokepark" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9park_Wii:_Pikachu%27s_Adventure/Times",
-								"rumble" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Rumble/Times",
-								"blackwhite" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Black/White/Times",
-								"pokepark2" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9park_2:_Wonders_Beyond/Times",
-								"black2white2" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Black2/White2/Times",
-								"conquest" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_Conquest/Times",
-								"xy" => "http://www.pokemonspeedruns.com/index.php/Pok%C3%A9mon_X/Y/Times",
-							);
-							
-							if (array_key_exists("game", $_GET) && array_key_exists($_GET["game"], $titles))
-							{
-								$content = file_get_contents($urls[$_GET["game"]]);
-								if (preg_match_all('/<span\sclass="mw-headline".*?>\s(.*?)\s<\/span>/', $content, $matches))
-								{
-									foreach ($matches[1] as $match)
-									{
-										echo '<option>' . $match . '</option>';
-									}
-								}
-						?>
-					</td>
-					<td style="width: 33%; text-align: center">
-						<?php
-								echo '<b>' . $titles[$_GET["game"]] . '</b>';
-						?>
-					</td>
-					<td style="width: 33%; text-align: right">
-						<?php
-								echo '<a href="' . $urls[$_GET["game"]] . '">Submit a time</a>';
-							}
-						?>
-					</td>
-				</tr>
-			</table>
-		</div>
+		<?php
+        echo $headers;
+        ?>
 											
 		<script type="text/javascript">
 			document.getElementById("category").onchange = function() {
@@ -294,21 +379,8 @@ exit();
 		</script>
 		
 		<?php
-			if (array_key_exists("game", $_GET) && array_key_exists($_GET["game"], $urls))
-			{
-				$content = file_get_contents($urls[$_GET["game"]]);
-				
-				if (preg_match_all('/<table.*?>.*?<\/[\s]*table>/s', $content, $matches))
-				{
-					$i = 0;
-					foreach ($matches[0] as $match)
-					{
-						echo '<div id="board' . $i . '" class="content">' . $match . '</div>';
-						$i++;
-					}
-				}
-			}
-		?>
+        echo $boards;
+        ?>
 	</div>
 </body>
 </html>
