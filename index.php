@@ -156,7 +156,7 @@ if(strpos($_SERVER['REQUEST_URI'], '/index.php/') !== false) {
 		<div id="navbar">
 			<a href="http://forums.pokemonspeedruns.com/index.php" class="navbutton navbuttonleft">Forums</a>
 			<a href="http://www.pokemonspeedruns.com/index.php/Main_Page" class="navbutton">Wiki</a>
-			<a href="leaderboards.php" class="navbutton">Leaderboards</a>
+			<a href="http://www.speedrun.com/pokemon" class="navbutton">Leaderboards</a>
 			<a href="http://www.pokemonspeedruns.com/index.php/FAQ_List" class="navbutton">FAQs</a>
 			<a href="http://twitch.tv/team/psr" class="navbutton">Twitch</a>
 		</div>
